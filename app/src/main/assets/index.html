@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#20233a" />
+    <meta name="description" content="青禾实验学校课程排班与时间管理" />
+    <title>青禾排课 · 学校课程排班</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">QH</div>
+          <div>
+            <strong>青禾排课</strong>
+            <span>校务排班中心</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section-label">工作台</div>
+        <nav class="primary-nav" aria-label="主导航">
+          <button class="nav-item active" data-view="dashboard"><span class="nav-icon">⌂</span><span>总览</span></button>
+          <button class="nav-item" data-view="schedule"><span class="nav-icon">▦</span><span>课程排班</span><span class="nav-badge">本周</span></button>
+          <button class="nav-item" data-view="teachers"><span class="nav-icon">♙</span><span>教师管理</span></button>
+          <button class="nav-item" data-view="classes"><span class="nav-icon">▤</span><span>班级管理</span></button>
+        </nav>
+
+        <div class="sidebar-section-label">配置中心</div>
+        <nav class="secondary-nav" aria-label="配置导航">
+          <button class="nav-item" data-view="time"><span class="nav-icon">◷</span><span>时间设置</span></button>
+          <button class="nav-item" data-view="data"><span class="nav-icon">⇩</span><span>数据与导出</span></button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sync-card">
+            <span class="sync-dot"></span>
+            <div><strong>本地数据已保存</strong><span>最后同步：刚刚</span></div>
+          </div>
+          <div class="version">青禾排课 v1.0 · 离线可用</div>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="topbar-heading">
+            <div class="eyebrow" id="topbarEyebrow">2026-2027 学年 · 第 8 周</div>
+            <h1 id="pageTitle">本周概览</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button" id="quickSearch" title="搜索"><span>⌕</span></button>
+            <div class="topbar-divider"></div>
+            <div class="user-chip"><div class="avatar">教</div><div><strong>教务处</strong><span>管理员</span></div><span class="chevron">⌄</span></div>
+          </div>
+        </header>
+
+        <div class="content" id="appContent"></div>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="entryModalBackdrop" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle">
+        <div class="modal-header"><div><div class="modal-kicker" id="entryModalKicker">编辑安排</div><h2 id="entryModalTitle">添加课程</h2></div><button class="close-button" data-close-modal="entryModalBackdrop">×</button></div>
+        <form id="entryForm">
+          <input type="hidden" id="entryId" />
+          <input type="hidden" id="entryDay" />
+          <input type="hidden" id="entrySlotId" />
+          <div class="slot-context" id="entryContext"></div>
+          <div class="form-grid">
+            <label class="field full"><span>课程 / 安排名称</span><select id="entryCourse"></select></label>
+            <label class="field full" id="customNameField" hidden><span>自定义名称</span><input id="entryCustomName" placeholder="例如：社团活动、校队训练" /></label>
+            <label class="field" id="entryTeacherField"><span>任课教师</span><select id="entryTeacher"></select></label>
+            <label class="field" id="entryClassField"><span>对应班级</span><select id="entryClass"></select></label>
+            <label class="field"><span>教室 / 地点</span><input id="entryRoom" placeholder="例如：A301" /></label>
+            <label class="field"><span>备注</span><input id="entryNote" placeholder="可填写临时代课等说明" /></label>
+          </div>
+          <div class="form-hint" id="entryHint"></div>
+          <div class="modal-footer"><button type="button" class="button ghost danger" id="deleteEntryButton" hidden>删除安排</button><div class="modal-footer-spacer"></div><button type="button" class="button ghost" data-close-modal="entryModalBackdrop">取消</button><button type="submit" class="button primary">保存安排</button></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="entityModalBackdrop" hidden>
+      <section class="modal compact" role="dialog" aria-modal="true" aria-labelledby="entityModalTitle">
+        <div class="modal-header"><div><div class="modal-kicker" id="entityModalKicker">基础资料</div><h2 id="entityModalTitle">添加教师</h2></div><button class="close-button" data-close-modal="entityModalBackdrop">×</button></div>
+        <form id="entityForm">
+          <input type="hidden" id="entityType" /><input type="hidden" id="entityId" />
+          <div class="form-grid">
+            <label class="field full"><span id="entityNameLabel">姓名</span><input id="entityName" required /></label>
+            <label class="field" id="entitySubjectField"><span>任教学科</span><input id="entitySubject" placeholder="例如：数学" /></label>
+            <label class="field" id="entityGradeField"><span>年级</span><select id="entityGrade"><option>初一</option><option>初二</option><option>初三</option><option>高一</option><option>高二</option><option>高三</option></select></label>
+            <label class="field" id="entityRoomField"><span>固定教室</span><input id="entityRoom" placeholder="例如：A301" /></label>
+            <label class="field"><span>联系方式</span><input id="entityContact" placeholder="可选" /></label>
+          </div>
+          <div class="modal-footer"><div class="modal-footer-spacer"></div><button type="button" class="button ghost" data-close-modal="entityModalBackdrop">取消</button><button type="submit" class="button primary">保存</button></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="slotModalBackdrop" hidden>
+      <section class="modal compact" role="dialog" aria-modal="true" aria-labelledby="slotModalTitle">
+        <div class="modal-header"><div><div class="modal-kicker">时间轴设置</div><h2 id="slotModalTitle">添加时间段</h2></div><button class="close-button" data-close-modal="slotModalBackdrop">×</button></div>
+        <form id="slotForm">
+          <input type="hidden" id="slotEditId" />
+          <div class="form-grid">
+            <label class="field full"><span>时间段名称</span><input id="slotName" required placeholder="例如：社团活动" /></label>
+            <label class="field"><span>开始时间</span><input id="slotStart" type="time" required /></label>
+            <label class="field"><span>结束时间</span><input id="slotEnd" type="time" required /></label>
+            <label class="field full"><span>时段类型</span><select id="slotType"><option value="class">课程</option><option value="meal">用餐</option><option value="activity">活动 / 运动</option><option value="break">课间 / 休息</option></select></label>
+          </div>
+          <div class="modal-footer"><div class="modal-footer-spacer"></div><button type="button" class="button ghost" data-close-modal="slotModalBackdrop">取消</button><button type="submit" class="button primary">保存时段</button></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js?version=4"></script>
+  </body>
+</html>
+
+
+
