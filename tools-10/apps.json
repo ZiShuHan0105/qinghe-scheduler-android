@@ -1,0 +1,13 @@
+[
+  {"id":"qr-studio","package":"com.qinghe.tools.qrstudio","label":"青禾二维码","kind":"qr","description":"输入文本并生成可复制的二维码内容预览"},
+  {"id":"smart-calculator","package":"com.qinghe.tools.calculator","label":"青禾计算器","kind":"calculator","description":"支持加减乘除的轻量计算器"},
+  {"id":"unit-converter","package":"com.qinghe.tools.converter","label":"青禾换算","kind":"converter","description":"米与英尺之间快速换算"},
+  {"id":"screen-lamp","package":"com.qinghe.tools.screenlamp","label":"青禾屏幕灯","kind":"lamp","description":"使用全屏高亮作为手电筒和阅读灯"},
+  {"id":"password-maker","package":"com.qinghe.tools.password","label":"青禾密码生成","kind":"password","description":"生成随机安全密码"},
+  {"id":"stopwatch","package":"com.qinghe.tools.stopwatch","label":"青禾秒表","kind":"stopwatch","description":"开始、暂停和重置计时"},
+  {"id":"compass","package":"com.qinghe.tools.compass","label":"青禾指南针","kind":"compass","description":"读取设备磁场传感器状态"},
+  {"id":"notepad","package":"com.qinghe.tools.notepad","label":"青禾记事","kind":"notepad","description":"本地编辑和保存一段文字"},
+  {"id":"file-info","package":"com.qinghe.tools.fileinfo","label":"青禾文件信息","kind":"fileinfo","description":"选择文件并显示名称和 Uri 信息"},
+  {"id":"bmi","package":"com.qinghe.tools.bmi","label":"青禾 BMI","kind":"bmi","description":"根据身高体重计算 BMI"}
+]
+
