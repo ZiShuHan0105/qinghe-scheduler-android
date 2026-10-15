@@ -59,3 +59,10 @@ Gradle 工程配置也保留在根目录，Android Studio 可以直接打开根�
 
 `image-compressor/` 是另一个独立的 Android 工程，提供相册选图、JPEG 质量调整和 Downloads 保存功能。使用 `build-image-compressor.ps1` 构建，APK 名称为 `image-compressor-debug.apk`。两个 APK 的下载入口统一记录在 `downloads/README.md`，发布版本会作为 GitHub Release 资产提供。
 
+
+
+## v1.1.0 十个工具 APK
+
+仓库新增十个独立的原创工具 APK：二维码、计算器、单位换算、屏幕灯、密码生成、秒表、指南针、本地记事、文件信息和 BMI。它们使用独立包名，源码模板位于 `tools-10/`，构建脚本是 `build-ten-tools.ps1`。
+
+全部 APK 的直接下载地址集中在 [`downloads/README.md`](downloads/README.md)，当前版本是 [v1.1.0 Release](https://github.com/ZiShuHan0105/qinghe-scheduler-android/releases/tag/v1.1.0)。
