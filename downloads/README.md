@@ -1,6 +1,6 @@
 # APK 下载
 
-本目录统一说明两个 APK 的用途和下载入口。APK 文件作为 GitHub Release 资产发布，避免把二进制构建产物混入源码提交；每个链接都指向同一个公开仓库的 Releases 页面。
+两个 APK 都发布在公开仓库的 v1.0.0 Release 中，源码和构建脚本同时保留在仓库内。
 
 ## 青禾排课
 
@@ -14,15 +14,20 @@
 - 冲突提醒
 - PNG、ZIP、Excel、JSON 导出
 
-下载：发布 Release 后，打开仓库的 Releases 页面，下载 `qinghe-scheduler-debug.apk`。
+直接下载：
+
+[下载 qinghe-scheduler-debug.apk](https://github.com/ZiShuHan0105/qinghe-scheduler-android/releases/download/v1.0.0/qinghe-scheduler-debug.apk)
 
 ## 图片压缩工具
 
 从系统相册选择图片，拖动质量滑块后压缩为 JPEG，保存到 `Downloads/图片压缩`。
 
-下载：发布 Release 后，打开仓库的 Releases 页面，下载 `image-compressor-debug.apk`。
+直接下载：
 
-## 源码和构建
+[下载 image-compressor-debug.apk](https://github.com/ZiShuHan0105/qinghe-scheduler-android/releases/download/v1.0.0/image-compressor-debug.apk)
+
+## 全部版本
+
+[打开 v1.0.0 Release](https://github.com/ZiShuHan0105/qinghe-scheduler-android/releases/tag/v1.0.0)
 
 两个工程源码和构建脚本都在仓库中。详见根目录 `README.md`、`apps/README.md` 和 `image-compressor/README.md`。
-
