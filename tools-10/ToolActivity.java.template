@@ -1,0 +1,72 @@
+package __PACKAGE__;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.Locale;
+
+public class MainActivity extends Activity {
+    private static final String KIND = "__TOOL_KIND__";
+    private TextView result;
+    private EditText first;
+    private EditText second;
+    private long started;
+    private long elapsed;
+    private boolean running;
+    private final Handler handler = new Handler();
+
+    @Override public void onCreate(Bundle state) {
+        super.onCreate(state);
+        LinearLayout root = new LinearLayout(this); root.setOrientation(LinearLayout.VERTICAL); root.setPadding(40, 46, 40, 32); root.setGravity(Gravity.CENTER_HORIZONTAL); root.setBackgroundColor(0xFFF6F7FB);
+        TextView title = new TextView(this); title.setText("__APP_LABEL__"); title.setTextSize(27); title.setTextColor(0xFF20233A); title.setGravity(Gravity.CENTER); root.addView(title, new LinearLayout.LayoutParams(-1, -2));
+        TextView desc = new TextView(this); desc.setText("__DESCRIPTION__"); desc.setTextSize(14); desc.setTextColor(0xFF858AA7); desc.setGravity(Gravity.CENTER); LinearLayout.LayoutParams dp = new LinearLayout.LayoutParams(-1, -2); dp.topMargin = 12; root.addView(desc, dp);
+        buildTool(root);
+        result = new TextView(this); result.setText("等待操作"); result.setTextSize(16); result.setTextColor(0xFF555A77); result.setGravity(Gravity.CENTER); LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, 0, 1); rp.topMargin = 28; root.addView(result, rp);
+        setContentView(root);
+    }
+
+    private void buildTool(LinearLayout root) {
+        if (KIND.equals("lamp")) { Button b = button("打开 / 关闭屏幕灯"); b.setOnClickListener(v -> toggleLamp()); root.addView(b, margins()); return; }
+        if (KIND.equals("password")) { Button b = button("生成 16 位密码"); b.setOnClickListener(v -> generatePassword()); root.addView(b, margins()); return; }
+        if (KIND.equals("stopwatch")) { Button b = button("开始 / 暂停"); b.setOnClickListener(v -> toggleStopwatch()); root.addView(b, margins()); Button reset = button("重置"); reset.setOnClickListener(v -> { running = false; elapsed = 0; result.setText("00:00.00"); }); root.addView(reset, margins()); return; }
+        if (KIND.equals("compass")) { Button b = button("读取传感器"); b.setOnClickListener(v -> readCompass()); root.addView(b, margins()); return; }
+        if (KIND.equals("fileinfo")) { Button b = button("选择文件"); b.setOnClickListener(v -> chooseFile()); root.addView(b, margins()); return; }
+        if (KIND.equals("notepad")) { first = edit("输入要保存的内容", true); root.addView(first, margins()); Button b = button("保存到本地"); b.setOnClickListener(v -> saveNote()); root.addView(b, margins()); return; }
+        first = edit(KIND.equals("bmi") ? "身高（厘米）" : KIND.equals("calculator") ? "第一个数字" : "输入数值 / 文本", false); root.addView(first, margins());
+        if (KIND.equals("calculator") || KIND.equals("bmi")) { second = edit(KIND.equals("bmi") ? "体重（公斤）" : "第二个数字", false); root.addView(second, margins()); }
+        Button b = button(KIND.equals("qr") ? "生成内容预览" : KIND.equals("converter") ? "换算" : KIND.equals("bmi") ? "计算 BMI" : "计算"); b.setOnClickListener(v -> perform()); root.addView(b, margins());
+    }
+
+    private LinearLayout.LayoutParams margins() { LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, -2); p.topMargin = 16; return p; }
+    private Button button(String text) { Button b = new Button(this); b.setText(text); return b; }
+    private EditText edit(String hint, boolean multi) { EditText e = new EditText(this); e.setHint(hint); e.setTextSize(16); if (multi) { e.setMinLines(6); e.setGravity(Gravity.TOP); } return e; }
+
+    private void perform() {
+        String a = first.getText().toString().trim();
+        if (KIND.equals("qr")) { result.setText(a.isEmpty() ? "请输入文本" : "二维码内容预览：\n" + a); return; }
+        try { double x = Double.parseDouble(a); if (KIND.equals("converter")) { result.setText(String.format(Locale.US, "%.4f 米 = %.4f 英尺", x, x * 3.28084)); } else if (KIND.equals("calculator")) { double y = Double.parseDouble(second.getText().toString().trim()); result.setText(String.format(Locale.US, "%.4f + %.4f = %.4f", x, y, x + y)); } else if (KIND.equals("bmi")) { double kg = Double.parseDouble(second.getText().toString().trim()); double bmi = kg / Math.pow(x / 100.0, 2); result.setText(String.format(Locale.US, "BMI = %.1f\n%s", bmi, bmi < 18.5 ? "偏低" : bmi < 24 ? "正常" : bmi < 28 ? "偏高" : "较高")); } } catch (Exception e) { result.setText("请输入有效数字"); }
+    }
+
+    private void generatePassword() { String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%"; SecureRandom random = new SecureRandom(); StringBuilder value = new StringBuilder(); for (int i = 0; i < 16; i++) value.append(chars.charAt(random.nextInt(chars.length()))); result.setText("已生成密码：\n" + value); }
+    private void toggleLamp() { boolean on = getWindow().getDecorView().getBackground() == null; getWindow().getDecorView().setBackgroundColor(on ? 0xFFFFFFFF : 0xFFF6F7FB); result.setText(on ? "屏幕灯已打开" : "屏幕灯已关闭"); }
+    private void toggleStopwatch() { if (running) { elapsed += System.currentTimeMillis() - started; running = false; } else { started = System.currentTimeMillis(); running = true; tick(); } }
+    private void tick() { if (!running) return; long ms = elapsed + System.currentTimeMillis() - started; result.setText(String.format(Locale.US, "%02d:%02d.%02d", ms / 60000, (ms / 1000) % 60, (ms / 10) % 100)); handler.postDelayed(this::tick, 50); }
+    private void readCompass() { SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE); Sensor magnetic = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD); result.setText(magnetic == null ? "此设备没有磁场传感器" : "已发现磁场传感器：" + magnetic.getName()); }
+    private void chooseFile() { Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT); intent.addCategory(Intent.CATEGORY_OPENABLE); intent.setType("*/*"); startActivityForResult(intent, 10); }
+    @Override protected void onActivityResult(int request, int code, Intent data) { super.onActivityResult(request, code, data); if (request == 10 && code == RESULT_OK && data != null) { Uri uri = data.getData(); result.setText(uri == null ? "未选择文件" : "文件 Uri：\n" + uri); } }
+    private void saveNote() { try (FileOutputStream out = openFileOutput("qinghe-note.txt", MODE_PRIVATE)) { out.write(first.getText().toString().getBytes(java.nio.charset.StandardCharsets.UTF_8)); result.setText("已保存到应用本地存储：qinghe-note.txt"); } catch (IOException e) { result.setText("保存失败"); } }
+}
+
