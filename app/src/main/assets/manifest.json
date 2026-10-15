@@ -1,0 +1,13 @@
+{
+  "name": "青禾排课 · 学校课程排班",
+  "short_name": "青禾排课",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#20233a",
+  "lang": "zh-CN",
+  "icons": []
+}
+
+
+
