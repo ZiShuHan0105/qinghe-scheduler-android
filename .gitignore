@@ -1,0 +1,15 @@
+# Android / Gradle build outputs
+.gradle/
+build/
+app/build/
+image-compressor/build/
+*.iml
+.idea/
+local.properties
+
+# Local generated APK staging
+QingheSchedulerBuild/
+QingheImageCompressorBuild/
+downloads/*.apk
+downloads/*.zip
+
